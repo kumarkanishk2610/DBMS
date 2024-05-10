@@ -1,0 +1,60 @@
+DECLARE
+f_pnr flyer.pnr%type:='AAAAAAA';
+f_name flyer.name%type;
+f_gateno flyer.gateno%type;
+begin
+SELECT name, gateno into f_name,f_gateno FROM flyer where pnr=f_pnr;
+dbms_output.put_line('Name:'||f_name);
+dbms_output.put_line('GateNo:'||f_gateno);
+exception
+when no_data_found then dbms_output.put_line('no such flyer');
+when others then dbms_output.put_line('error');
+end;
+/
+
+
+
+DECLARE
+f_pnr flyer.pnr%type:='6BQ7LPT';
+f_name flyer.name%type;
+f_gateno flyer.gateno%type;
+begin
+SELECT name, gateno into f_name,f_gateno FROM flyer where pnr=f_pnr;
+dbms_output.put_line('Name:'||f_name);
+dbms_output.put_line('GateNo:'||f_gateno);
+exception
+when no_data_found then dbms_output.put_line('no such flyer');
+when others then dbms_output.put_line('error');
+end;
+/
+
+
+
+declare
+f_pnr flyer.pnr%type;
+f_name flyer.name%type;
+f_gateno flyer.gateno%type:=&gateno;
+ex_invalid_gate_no exception;
+begin
+if f_gateno<=0 then
+raise ex_invalid_gate_no;
+else
+select name, pnr into f_name,f_pnr from flyer where gateno=f_gateno;
+dbms_output.put_line('name:'||f_name);
+dbms_output.put_line('pnr:'||f_pnr);
+end if;
+exception
+when ex_invalid_gate_no then dbms_output.put_line('GateNo should be greater than zero');
+when no_data_found then dbms_output.put_line('no such flyer');
+when others then dbms_output.put_line('error');
+end;
+/
+Enter value for gateno: 1
+old   4: f_gateno flyer.gateno%type:=&gateno;
+new   4: f_gateno flyer.gateno%type:=1;
+name:Nath                                                                                                                                                                                               
+pnr:6BQ7LPT                                                                                                                                                                                             
+
+PL/SQL procedure successfully completed.
+
+SQL> spool off

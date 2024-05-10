@@ -1,0 +1,30 @@
+CREATE OR REPLACE TRIGGER display_amount_changes
+BEFORE DELETE OR INSERT OR UPDATE ON passenger
+FOR EACH ROW
+WHEN (NEW.amount > 0)
+DECLARE
+amt_diff number;
+BEGIN
+amt_diff := :NEW.amount - :OLD.amount;
+dbms_output.put_line('Old Amount: ' || :OLD.amount);
+dbms_output.put_line('New Amount: ' || :NEW.amount);
+dbms_output.put_line('Amount difference: ' || amt_diff);
+END;
+/
+
+
+
+DECLARE
+total_rows number(2);
+BEGIN
+UPDATE passenger
+SET amount = amount + 5000;
+IF sql%notfound THEN
+
+dbms_output.put_line('no customers updated');
+ELSIF sql%found THEN
+total_rows := sql%rowcount;
+dbms_output.put_line( total_rows || ' passengers updated ');
+END IF;
+END;
+/

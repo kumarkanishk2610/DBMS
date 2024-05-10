@@ -1,0 +1,30 @@
+DECLARE
+total_rows number(2);
+BEGIN
+UPDATE flyer
+SET gateno = gateno + 1;
+IF sql%notfound THEN
+dbms_output.put_line('no customers updated');
+ELSIF sql%found THEN
+total_rows := sql%rowcount;
+dbms_output.put_line( total_rows || ' passengers updated ');
+END IF;
+END;
+/
+
+DECLARE
+f_pnr flyer.pnr%type;
+f_name flyer.name%type;
+f_gateno flyer.gateno%type;
+CURSOR c_flyer is
+SELECT pnr, name, gateno FROM flyer;
+begin
+open c_flyer;
+loop
+FETCH c_flyer into f_pnr, f_name, f_gateno;
+EXIT WHEN c_flyer%notfound;
+dbms_output.put_line(f_pnr || ' ' || f_name || ' ' || f_gateno);
+end loop;
+close c_flyer;
+end;
+/
